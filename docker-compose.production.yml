@@ -3,6 +3,35 @@
 version: '3.2'
 
 services:
-  app:
+  cron:
+    image: quay.io/wikipedialibrary/matomo:fpm-alpine
+    command: /cron.sh
+    restart: always
+    volumes:
+      - type: volume
+        source: matomo
+        target: /var/www/html
+      - type: bind
+        source: ./www-data.crontab
+        target: /tmp/www-data.crontab
+        read_only: true
+      - type: bind
+        source: ./logs
+        target: /var/www/html/logs
+      - type: bind
+        source: ./entrypoint.sh
+        target: /entrypoint.sh
+        read_only: true
+      - type: bind
+        source: ./cron.sh
+        target: /cron.sh
+        read_only: true
     environment:
       - MATOMO_URL=https://analytics-wikipedialibrary.wmflabs.org/
+      - MATOMO_DATABASE_HOST=db
+      - MATOMO_DATABASE_ADAPTER=mysql
+      - MATOMO_DATABASE_TABLES_PREFIX=matomo_
+      - MATOMO_DATABASE_DBNAME=matomo
+    secrets:
+      - MATOMO_DATABASE_USERNAME
+      - MATOMO_DATABASE_PASSWORD

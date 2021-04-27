@@ -33,9 +33,6 @@ services:
         source: matomo
         target: /var/www/html
       - type: bind
-        source: ./www-data.crontab
-        target: /var/spool/cron/crontabs/www-data
-      - type: bind
         source: ./logs
         target: /var/www/html/logs
       - type: bind
