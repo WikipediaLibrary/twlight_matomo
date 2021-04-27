@@ -15,7 +15,14 @@ services:
     volumes:
       - db:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=matomo
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/MYSQL_ROOT_PASSWORD
+      - MYSQL_USER_FILE=/run/secrets/MATOMO_DATABASE_USERNAME
+      - MYSQL_PASSWORD_FILE=/run/secrets/MATOMO_DATABASE_PASSWORD
+    secrets:
+      - MYSQL_ROOT_PASSWORD
+      - MATOMO_DATABASE_USERNAME
+      - MATOMO_DATABASE_PASSWORD
   app:
     image: quay.io/wikipedialibrary/matomo:fpm-alpine
     restart: always
@@ -25,8 +32,17 @@ services:
 #      - ./config:/var/www/html/config:rw
 #      - ./logs:/var/www/html/logs
       - matomo:/var/www/html
+      - type: bind
+        source: ./entrypoint.sh
+        target: /entrypoint.sh
     environment:
       - MATOMO_DATABASE_HOST=db
+      - MATOMO_DATABASE_ADAPTER=mysql
+      - MATOMO_DATABASE_TABLES_PREFIX=matomo_
+      - MATOMO_DATABASE_DBNAME=matomo
+    secrets:
+      - MATOMO_DATABASE_USERNAME
+      - MATOMO_DATABASE_PASSWORD
   web:
     image: quay.io/wikipedialibrary/nginx:latest
     restart: always

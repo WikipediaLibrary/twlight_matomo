@@ -1,0 +1,11 @@
+---
+
+version: '3.2'
+# Local environment should mount plaintext files as secrets
+secrets:
+  MYSQL_ROOT_PASSWORD:
+    file: ./secrets/MYSQL_ROOT_PASSWORD
+  MATOMO_DATABASE_USERNAME:
+    file: ./secrets/MATOMO_DATABASE_USERNAME
+  MATOMO_DATABASE_PASSWORD:
+    file: ./secrets/MATOMO_DATABASE_PASSWORD
