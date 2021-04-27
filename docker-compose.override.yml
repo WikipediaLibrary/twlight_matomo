@@ -9,3 +9,8 @@ secrets:
     file: ./secrets/MATOMO_DATABASE_USERNAME
   MATOMO_DATABASE_PASSWORD:
     file: ./secrets/MATOMO_DATABASE_PASSWORD
+
+services:
+  app:
+    environment:
+      - MATOMO_URL=http://localhost:8080/

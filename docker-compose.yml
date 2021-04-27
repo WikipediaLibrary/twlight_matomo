@@ -13,7 +13,9 @@ services:
     command: --max-allowed-packet=64MB
     restart: always
     volumes:
-      - db:/var/lib/mysql
+      - type: volume
+        source: db
+        target: /var/lib/mysql
     environment:
       - MYSQL_DATABASE=matomo
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/MYSQL_ROOT_PASSWORD
@@ -26,12 +28,16 @@ services:
   app:
     image: quay.io/wikipedialibrary/matomo:fpm-alpine
     restart: always
-    links:
-      - db
     volumes:
-#      - ./config:/var/www/html/config:rw
-#      - ./logs:/var/www/html/logs
-      - matomo:/var/www/html
+      - type: volume
+        source: matomo
+        target: /var/www/html
+      - type: bind
+        source: ./www-data.crontab
+        target: /var/spool/cron/crontabs/www-data
+      - type: bind
+        source: ./logs
+        target: /var/www/html/logs
       - type: bind
         source: ./entrypoint.sh
         target: /entrypoint.sh
@@ -47,8 +53,14 @@ services:
     image: quay.io/wikipedialibrary/nginx:latest
     restart: always
     volumes:
-      - matomo:/var/www/html:ro
+      - type: volume
+        source: matomo
+        target: /var/www/html
+        read_only: true
       # see https://github.com/matomo-org/matomo-nginx
-      - ./conf/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - type: bind
+        source: ./conf/nginx.conf
+        target: /etc/nginx/conf.d/default.conf
+        read_only: true
     ports:
       - 8080:80

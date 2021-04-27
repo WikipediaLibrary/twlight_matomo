@@ -1,0 +1,1 @@
+5 * * * * /usr/bin/env php /var/www/html/console core:archive --url=${MATOMO_URL}
