@@ -36,7 +36,7 @@ services:
         source: ./logs
         target: /var/www/html/logs
       - type: bind
-        source: ./entrypoint.sh
+        source: ./bin/entrypoint.sh
         target: /entrypoint.sh
     environment:
       - MATOMO_DATABASE_HOST=db

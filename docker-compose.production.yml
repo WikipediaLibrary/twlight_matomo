@@ -12,18 +12,18 @@ services:
         source: matomo
         target: /var/www/html
       - type: bind
-        source: ./www-data.crontab
+        source: ./conf/www-data.crontab
         target: /tmp/www-data.crontab
         read_only: true
       - type: bind
         source: ./logs
         target: /var/www/html/logs
       - type: bind
-        source: ./entrypoint.sh
+        source: ./bin/entrypoint.sh
         target: /entrypoint.sh
         read_only: true
       - type: bind
-        source: ./cron.sh
+        source: ./bin/cron.sh
         target: /cron.sh
         read_only: true
     environment:
