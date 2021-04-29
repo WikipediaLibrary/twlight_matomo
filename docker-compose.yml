@@ -27,6 +27,7 @@ services:
       - MATOMO_DATABASE_PASSWORD
   app:
     image: quay.io/wikipedialibrary/matomo:fpm-alpine
+    command: /matomo.sh
     restart: always
     volumes:
       - type: volume
@@ -36,8 +37,17 @@ services:
         source: ./logs
         target: /var/www/html/logs
       - type: bind
+        source: ./bin/secrets.sh
+        target: /secrets.sh
+        read_only: true
+      - type: bind
         source: ./bin/entrypoint.sh
         target: /entrypoint.sh
+        read_only: true
+      - type: bind
+        source: ./bin/matomo.sh
+        target: /matomo.sh
+        read_only: true
     environment:
       - MATOMO_DATABASE_HOST=db
       - MATOMO_DATABASE_ADAPTER=mysql
@@ -61,3 +71,42 @@ services:
         read_only: true
     ports:
       - 8080:80
+  cron:
+    image: quay.io/wikipedialibrary/matomo:fpm-alpine
+    command: /cron.sh
+    restart: always
+    volumes:
+      - type: volume
+        source: matomo
+        target: /var/www/html
+      - type: bind
+        source: ./logs
+        target: /var/www/html/logs
+      - type: bind
+        source: ./bin/secrets.sh
+        target: /secrets.sh
+        read_only: true
+      - type: bind
+        source: ./bin/entrypoint.sh
+        target: /entrypoint.sh
+        read_only: true
+      - type: bind
+        source: ./bin/cron.sh
+        target: /cron.sh
+        read_only: true
+      - type: bind
+        source: ./bin/backup.sh
+        target: /backup.sh
+        read_only: true
+      - type: bind
+        source: ./bin/restore.sh
+        target: /restore.sh
+        read_only: true
+    environment:
+      - MATOMO_DATABASE_HOST=db
+      - MATOMO_DATABASE_ADAPTER=mysql
+      - MATOMO_DATABASE_TABLES_PREFIX=matomo_
+      - MATOMO_DATABASE_DBNAME=matomo
+    secrets:
+      - MATOMO_DATABASE_USERNAME
+      - MATOMO_DATABASE_PASSWORD

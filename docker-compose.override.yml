@@ -9,3 +9,12 @@ secrets:
     file: ./secrets/MATOMO_DATABASE_USERNAME
   MATOMO_DATABASE_PASSWORD:
     file: ./secrets/MATOMO_DATABASE_PASSWORD
+
+services:
+  cron:
+    volumes:
+      - type: bind
+        source: ./backup
+        target: /srv/matomo/backup
+    environment:
+      - MATOMO_FQDN=localhost:8080
