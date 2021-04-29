@@ -1,6 +1,14 @@
 ---
 
 version: '3.2'
+# Production environment should use external secrets
+secrets:
+  MYSQL_ROOT_PASSWORD:
+    external: true
+  MATOMO_DATABASE_USERNAME:
+    external: true
+  MATOMO_DATABASE_PASSWORD:
+    external: true
 
 services:
   cron:
