@@ -17,4 +17,4 @@ services:
         source: ./cron/backup
         target: /srv/matomo/backup
     environment:
-      - MATOMO_FQDN=localhost:8080
+      - MATOMO_FQDN=localhost

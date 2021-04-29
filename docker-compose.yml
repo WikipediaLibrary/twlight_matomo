@@ -71,7 +71,7 @@ services:
         target: /etc/nginx/conf.d/default.conf
         read_only: true
     ports:
-      - 8080:80
+      - 80:80
   cron:
     image: quay.io/wikipedialibrary/matomo:fpm-alpine
     command: cron.sh
