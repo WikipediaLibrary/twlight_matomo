@@ -14,7 +14,7 @@ services:
   cron:
     volumes:
       - type: bind
-        source: ./backup
+        source: ./cron/backup
         target: /srv/matomo/backup
     environment:
       - MATOMO_FQDN=localhost:8080
