@@ -8,5 +8,10 @@ services:
       - type: bind
         source: /data/project/matomo
         target: /srv/matomo/backup
+      - type: bind
+        source: ./cron/conf
+        target: /opt/cron/conf
+        read_only: true
+
     environment:
       - MATOMO_FQDN=analytics-wikipedialibrary.wmflabs.org

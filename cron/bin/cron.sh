@@ -1,13 +1,19 @@
 #!/bin/sh
 set -e
 
-crontab=/tmp/www-data.crontab
+conf_dir=/opt/cron/conf
+crontabs_dir=/var/spool/cron/crontabs
+www_data_crontab=${conf_dir}/www-data.crontab
+root_crontab=${conf_dir}/root.crontab
 
-if  [ -f "${crontab}" ]
-then
-  cp /tmp/www-data.crontab /var/spool/cron/crontabs/www-data
-  chown root:root /var/spool/cron/crontabs/www-data
-fi
+for user in root www-data
+do
+  if  [ -f ${conf_dir}/${user}.crontab ]
+  then
+    cp ${conf_dir}/${user}.crontab ${crontabs_dir}/${user}
+    chown root:root ${crontabs_dir}/${user}
+  fi
+done
 
 apk add mariadb-client
 
