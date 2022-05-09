@@ -2,6 +2,8 @@
 
 source /secrets.sh
 
+set -eo pipefail
+
 dt=$( date +'%Y-%m-%d-%H-%M' )
 
 echo 'Backup Started'
@@ -16,3 +18,6 @@ tar -czf /srv/matomo/backup/${MATOMO_FQDN}.${dt}.tar.gz -P /var/www/html/config/
 # Cleanup db dump
 rm /tmp/${MATOMO_DATABASE_DBNAME}.sql
 echo 'Backup Complete'
+# Retain backups for 30 days.
+find /srv/matomo/backup/ -name "*.tar.gz" -mtime +30 -delete || :
+echo 'Removed backups created 30 days ago or more.'
